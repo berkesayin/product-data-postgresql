@@ -13,7 +13,7 @@ This is a Spring Boot application to extract product and category documents from
 - Elasticsearch and Kibana
 - PostgreSQL Database 
 
-## Elasticsearch Index Mapping (Schemas) 
+## Elasticsearch Index Mapping (Schemas) 
 
 `GET /product/_mapping`
 
