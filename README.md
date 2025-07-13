@@ -3,7 +3,7 @@
 This is a Spring Boot application to extract product and category documents from Elasticsearch and save them into PostgreSQL.
 
 ## Overview
-- Extracts documents from Elasticsearch: `product` index and ``category` index.
+- Extracts documents from Elasticsearch: `category` index and `product` index.
 - Maps and transforms data before persisting into PostgreSQL.
 - Uses JPA for database operations and Elasticsearch Java client for extraction.
 
@@ -21,20 +21,24 @@ This is a Spring Boot application to extract product and category documents from
 {
   "product": {
     "mappings": {
+      "dynamic": "strict",
       "properties": {
         "base_price": {
           "type": "scaled_float",
           "scaling_factor": 100
         },
-        "category_id": {
-          "type": "integer"
-        },
-        "category_name": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
+        "category": {
+          "properties": {
+            "id": {
+              "type": "keyword"
+            },
+            "name": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword"
+                }
+              }
             }
           }
         },
@@ -45,8 +49,7 @@ This is a Spring Boot application to extract product and category documents from
           "type": "text",
           "fields": {
             "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
+              "type": "keyword"
             }
           }
         },
@@ -60,9 +63,13 @@ This is a Spring Boot application to extract product and category documents from
         "product_name": {
           "type": "text",
           "fields": {
+            "autocomplete": {
+              "type": "text",
+              "analyzer": "autocomplete_analyzer",
+              "search_analyzer": "standard"
+            },
             "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
+              "type": "keyword"
             }
           }
         },
@@ -70,7 +77,7 @@ This is a Spring Boot application to extract product and category documents from
           "type": "keyword"
         },
         "status": {
-          "type": "integer"
+          "type": "boolean"
         }
       }
     }
